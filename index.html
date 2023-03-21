@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Boba PCL Viewer</title>
+		<link rel="stylesheet" href="./styles/index.css" />
+		<link rel="stylesheet" href="./styles/topbar.css" />
+	</head>
+	<body>
+		<nav>
+			<img alt="logo" class="topbar__logo" src="./static/boba_logo.png" />
+		</nav>
+		<div class="wrapper">
+			<div class="container">
+				<div class="container__top">
+					<img alt="folder_active" src="./static/folder_active.png" />
+					<p>열고자하는 PCL파일을 드래그해주세요.</p>
+				</div>
+				<p class="divider">또는</p>
+				<button id="browse_file_button">파일 찾아보기</button>
+			</div>
+		</div>
+	</body>
+	<script>
+		const dragZone = document.body;
+		dragZone.addEventListener("dragenter", () => {
+			dragZone.style.backgroundColor = "#c9deff";
+		});
+
+		dragZone.addEventListener("dragleave", () => {
+			dragZone.style.backgroundColor = "white";
+		});
+
+		const select = window.document
+			.getElementById("browse_file_button")
+			?.addEventListener("click", async () => {
+				try {
+					const filePath = await window.electron.ipcRenderer.invoke(
+						"openFileDialog"
+					);
+					const outputPath = `${filePath}.pdf`;
+					const output = await window.electron.ipcRenderer.invoke(
+						"convertPCLtoPDF",
+						{
+							inputPath: filePath,
+							outputFile: outputPath,
+						}
+					);
+					await window.electron.ipcRenderer.invoke("openItemWithOSDefault", {
+						filePath: output,
+					});
+				} catch (e) {
+					console.log(e)
+				}
+			});
+
+		window.document.addEventListener("dragover", (e) => {
+			e.preventDefault();
+			e.stopPropagation();
+		});
+
+		window.document.addEventListener("drop", async (event) => {
+			event.preventDefault();
+			event.stopPropagation();
+
+			const pathArr = [];
+			if (!event.dataTransfer) return;
+			Array.from(event?.dataTransfer.files).forEach((file) => {
+				const extension = file.name.split(".").pop()?.toLowerCase();
+				if (extension === "pcl") {
+					pathArr.push(file.path);
+				}
+			});
+
+			if (pathArr.length === 0) {
+				alert("PCL 파일을 드래그해주세요!");
+				return;
+			}
+
+			const outputPath = `${pathArr[0]}.pdf`;
+			console.log(outputPath);
+
+			try {
+				const output = await window.electron.ipcRenderer.invoke(
+					"convertPCLtoPDF",
+					{
+						inputPath: pathArr[0],
+						outputFile: outputPath,
+					}
+				);
+
+				await window.electron.ipcRenderer.invoke("openItemWithOSDefault", {
+					filePath: output,
+				});
+			} catch (e) {
+				alert(e);
+			}
+		});
+	</script>
+</html>
