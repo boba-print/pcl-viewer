@@ -6,7 +6,6 @@ const { is } = require("electron-util");
 const unhandled = require("electron-unhandled");
 const debug = require("electron-debug");
 const contextMenu = require("electron-context-menu");
-const menu = require("./menu.js");
 const fs = require("fs");
 const {
 	convertPCLtoPDF,
@@ -19,20 +18,28 @@ debug();
 contextMenu();
 
 // Note: Must match `build.appId` in package.json
-app.setAsDefaultProtocolClient("bobapclconverter", process.execPath, ["%1"]);
-app.setAppUserModelId("com.bobaprint.pclconverter");
+app.setAsDefaultProtocolClient("pslpclconverter", process.execPath, ["%1"]);
+app.setAppUserModelId("com.psl.pclconverter");
 
 // Prevent window from being garbage collected
 let mainWindow;
 
+
 const createMainWindow = async () => {
+	const iconPath = is.macos
+		? path.join(__dirname, "static/icons/icon.icns")
+		: is.linux
+		? path.join(__dirname, "static/icons/512x512.png")
+		: path.join(__dirname, "static/icons/icon.ico");
 	const window_ = new BrowserWindow({
 		title: app.name,
 		show: false,
 		width: 600,
 		height: 600,
+		icon: iconPath,
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
+			devTools: false,
 		},
 	});
 
@@ -93,7 +100,7 @@ app.on("open-file", async (event, filePath) => {
 
 (async () => {
 	await app.whenReady();
-	Menu.setApplicationMenu(menu);
+	Menu.setApplicationMenu(null);
 	mainWindow = await createMainWindow();
 
 	/**
