@@ -1,9 +1,9 @@
 {
   "name": "pcl-viewer",
-  "productName": "Boba PCL Viewer",
+  "productName": "PSL PCL Viewer",
   "version": "0.0.1",
-	"author": "boba",
-  "description": "Boba PCL Viewer",
+  "author": "boba",
+  "description": "PSL PCL Viewer",
   "license": "AGPL",
   "main": "./index.js",
   "scripts": {
@@ -12,8 +12,10 @@
     "pack": "electron-builder --dir",
     "package": "electron-forge package",
     "make": "electron-forge make",
-		"make:mac_x86_64": "electron-forge make --arch=x64 --platform=darwin",
-		"make:mac_arm64": "electron-forge make --platform=darwin"
+    "make:mac_x86_64": "electron-forge make --arch=x64 --platform=darwin",
+    "make:mac_arm64": "electron-forge make --platform=darwin",
+    "testing" : "electron .",
+    "build": "electron-builder"
   },
   "dependencies": {
     "electron-context-menu": "^3.4.0",
@@ -29,7 +31,54 @@
     "@electron-forge/maker-squirrel": "^6.0.5",
     "@electron-forge/maker-zip": "^6.0.5",
     "electron": "^13.0.0",
+    "electron-builder": "^25.1.8",
     "electron-reload": "^2.0.0-alpha.1",
     "electron-reloader": "^1.2.3"
+  },
+  "build": {
+    "appId": "com.psl.pclconverter",
+    "asar": false,
+    "productName": "PSL PCL Viewer",
+    "directories": {
+      "output": "release/"
+    },
+    "files": [
+      "index.js",
+      "util.js",
+      "preload.js",
+      "protocol.js",
+      "package.json",
+      "index.html",
+      "styles",
+      "static",
+      "bin"
+    ],
+    "extraResources": [
+      {
+        "from": "bin/",
+        "to": "bin/",
+        "filter": ["**/*"]
+      }
+    ],
+    "win": {
+      "icon": "static/icons/icon.ico",
+      "target": [
+        "nsis"
+      ]
+    },
+    "mac": {
+      "icon": "static/icons/icon.icns",
+      "target":[
+        "dmg",
+        "zip"
+      ]
+      }
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true,
+      "deleteAppDataOnUninstall": true
+    }
   }
-}
+
