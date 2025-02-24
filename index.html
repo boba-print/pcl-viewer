@@ -2,22 +2,22 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<title>Boba PCL Viewer</title>
+		<title>PSL PCL Viewer</title>
 		<link rel="stylesheet" href="./styles/index.css" />
 		<link rel="stylesheet" href="./styles/topbar.css" />
 	</head>
 	<body>
 		<nav>
-			<img alt="logo" class="topbar__logo" src="./static/boba_logo.png" />
+			<img alt="logo" class="topbar__logo" src="./static/psl_logo.png" />
 		</nav>
 		<div class="wrapper">
 			<div class="container">
 				<div class="container__top">
 					<img alt="folder_active" src="./static/folder_active.png" />
-					<p>열고자하는 PCL파일을 드래그해주세요.</p>
+					<p>Drag and drop a PCL File to open.</p>
 				</div>
-				<p class="divider">또는</p>
-				<button id="browse_file_button">파일 찾아보기</button>
+				<p class="divider">OR</p>
+				<button id="browse_file_button">Choose File</button>
 			</div>
 		</div>
 	</body>
@@ -73,7 +73,7 @@
 			});
 
 			if (pathArr.length === 0) {
-				alert("PCL 파일을 드래그해주세요!");
+				alert("Please drag a PCL file!");
 				return;
 			}
 

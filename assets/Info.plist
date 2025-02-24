@@ -13,7 +13,7 @@
 				<!-- <key>CFBundleTypeIconFile</key>
 				<string>file_nfo.icns</string> -->
 				<key>CFBundleTypeName</key>
-				<string>Boba PCL Viewer</string>
+				<string>PSL PCL Viewer</string>
 				<key>CFBundleTypeRole</key>
 				<string>Viewer</string>
 				<key>LSHandlerRank</key>

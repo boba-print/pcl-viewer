@@ -1,8 +1,8 @@
 module.exports = {
 	packagerConfig: {
 		icon: "./static/icons/Icon",
-		executableName: "Boba PCL Viewer",
-		appBundleId: "com.bobaprint.pclconverter",
+		executableName: "PSL PCL Viewer",
+		appBundleId: "com.psl.pclconverter",
 		mac: {
 			category: "public.app-category.social-networking",
 			darkModeSupport: false,
